@@ -7,6 +7,6 @@ Made with HTML, CSS, JS, and ❤️
 ## TODO
 - [x] Markup
 - [x] Styles
-- [ ] Generate board
+- [x] Generate board
 - [ ] Turn
 - [ ] Win logic
