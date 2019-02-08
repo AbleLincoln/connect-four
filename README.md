@@ -5,7 +5,7 @@ Made with HTML, CSS, JS, and ❤️
 ![Example of game](example.gif)
 
 ## TODO
-- [ ] Markup
+- [x] Markup
 - [ ] Styles
 - [ ] Generate board
 - [ ] Turn
