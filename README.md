@@ -8,5 +8,10 @@ Made with HTML, CSS, JS, and ❤️
 - [x] Markup
 - [x] Styles
 - [x] Generate board
-- [ ] Turn
+- [x] Game rules
+  - [x] selecting input toggles color
+  - [x] change who's turn it is
+  - [x] change who's turn is displayed
+  - [x] disable invalid slots
 - [ ] Win logic
+- [ ] Make it modular
