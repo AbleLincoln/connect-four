@@ -32,12 +32,20 @@ function runTurn(input) {
   // disable the input
   input.disabled = true;
   // enable the slot at (row + 1, col)
-  const { row, col } = input.dataset;
+  const { col, row } = input.dataset;
   // check if input is on the top row
   if (row < BOARDROWS - 1) {
     const neighbor = document.getElementById(`slot${col}${parseInt(row) + 1}`);
     neighbor.disabled = false;
   }
+
+  // check if it's a win
+  const isWin = checkWin(parseInt(col), parseInt(row), player1Turn ? 'player1' : 'player2');
+  if (isWin) {
+    alert('Winner!');
+    return;
+  }
+  // update win text (win celebrations)
 
   // change whose turn it is
   player1Turn = !player1Turn;
@@ -50,4 +58,96 @@ function runTurn(input) {
     playerIndicator.innerText = 'Player 2';
     playerIndicator.className = 'player2';
   }
+}
+
+function checkWin(col, row, currPlayer) {
+  return checkDown(col, row, currPlayer) || checkAcross(col, row, currPlayer) || checkDiagonal(col, row, currPlayer);
+  // check diagonals
+}
+
+function checkDown(col, row, currPlayer) {
+  if (row < 3) return false; // can't connect 4 if it's only stacked 3 or less
+
+  for (let j = row - 1; j > row - 4; j--) {
+    const currSlotPlayer = document.getElementById(`slot${col}${j}`).parentElement.className;
+    if (currSlotPlayer !== currPlayer) return false;
+  }
+
+  return true;
+}
+
+function checkAcross(col, row, currPlayer) {
+  let sameColorNeighbors = 0;
+
+  // check to the right
+  for (let i = col + 1; i < col + 4; i++) {
+    // break if out of bounds
+    if (i >= BOARDCOLS) break;
+    const currSlotPlayer = document.getElementById(`slot${i}${row}`).parentElement.className;
+    if (currSlotPlayer === currPlayer) sameColorNeighbors += 1;
+    else break;
+  }
+
+  // check to the left
+  for (let i = col - 1; i > col - 4; i--) {
+    // break if out of bounds
+    if (i < 0) break;
+    const currSlotPlayer = document.getElementById(`slot${i}${row}`).parentElement.className;
+    if (currSlotPlayer === currPlayer) sameColorNeighbors += 1;
+    else break;
+  }
+
+  return sameColorNeighbors >= 3;
+}
+
+function checkDiagonal(col, row, currPlayer) {
+  return checkUpLeft(col, row, currPlayer) || checkUpRight(col, row, currPlayer);
+}
+
+function checkUpRight(col, row, currPlayer) {
+  let sameColorNeighbors = 0;
+
+  // search up right
+  for (let i = 1; i < 4; i++) {
+    // break if out of bounds
+    if (col + i >= BOARDCOLS || row + 1 >= BOARDROWS) break;
+    const currSlotPlayer = document.getElementById(`slot${col + i}${row + 1}`).parentElement.className;
+    if (currSlotPlayer === currPlayer) sameColorNeighbors += 1;
+    else break;
+  }
+
+  // search down left
+  for (let i = 1; i < 4; i++) {
+    // break if out of bounds
+    if (col - i < 0 || row - 1 < 0) break;
+    const currSlotPlayer = document.getElementById(`slot${col - i}${row - 1}`).parentElement.className;
+    if (currSlotPlayer === currPlayer) sameColorNeighbors += 1;
+    else break;
+  }
+
+  return sameColorNeighbors >= 3;
+}
+
+function checkUpLeft(col, row, currPlayer) {
+  let sameColorNeighbors = 0;
+
+  // search up left
+  for (let i = 1; i < 4; i++) {
+    // break if out of bounds
+    if (col - i < 0 || row + 1 >= BOARDROWS) break;
+    const currSlotPlayer = document.getElementById(`slot${col - i}${row + 1}`).parentElement.className;
+    if (currSlotPlayer === currPlayer) sameColorNeighbors += 1;
+    else break;
+  }
+
+  // search down right
+  for (let i = 1; i < 4; i++) {
+    // break if out of bounds
+    if (col + i >= BOARDCOLS || row - 1 < 0) break;
+    const currSlotPlayer = document.getElementById(`slot${col + i}${row - 1}`).parentElement.className;
+    if (currSlotPlayer === currPlayer) sameColorNeighbors += 1;
+    else break;
+  }
+
+  return sameColorNeighbors >= 3;
 }
